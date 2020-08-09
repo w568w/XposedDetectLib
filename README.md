@@ -18,11 +18,7 @@ allprojects {
 ```
 2. Add the dependency
 ```groovy
-allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
-}
+implementation 'com.github.w568w:XposedDetectLib:1.1'
 ```
 Call this method to do an inspection:
 ```java
