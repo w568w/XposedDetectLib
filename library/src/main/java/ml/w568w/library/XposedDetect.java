@@ -4,7 +4,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
-import android.util.Log;
 
 import androidx.annotation.Keep;
 
@@ -47,12 +46,12 @@ public class XposedDetect {
     }
 
     public boolean detectXposed() {
+        status = 0;
         try {
             FutureTask<Void> futureTask = new FutureTask<>(new CheckThread());
             new Thread(futureTask).start();
             futureTask.get();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return status > 0;
     }
@@ -174,7 +173,7 @@ public class XposedDetect {
     private int check7() {
         CommandResult commandResult = Shell.run("ls /system/lib");
         String out = commandResult.getStdout();
-        boolean result = out.contains("xposed") || out.contains("Xposed");
+        boolean result = out.toLowerCase().contains("xposed");
         return commandResult.isSuccessful() ? (result ? 1 : 0) : 0;
     }
 
@@ -201,8 +200,7 @@ public class XposedDetect {
 
     @Keep
     private int check10() {
-        boolean result = testClassLoader("com.elderdrivers.riru.edxp.config.EdXpConfigGlobal");
-        return result ? 1 : 0;
+        return testClassLoader("com.elderdrivers.riru.edxp.config.EdXpConfigGlobal") ? 1 : 0;
     }
 
     @Keep
@@ -215,7 +213,6 @@ public class XposedDetect {
                         return 1;
                     }
                 }
-
             }
         } catch (Throwable ignored) {
 

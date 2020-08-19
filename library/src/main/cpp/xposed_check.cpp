@@ -33,6 +33,7 @@ extern "C" {
 #include "pmparser.h"
 }
 procmaps_iterator *maps;
+
 extern "C" JNIEXPORT jboolean
 JNICALL
 Java_ml_w568w_checkxposed_util_NativeDetect_detectXposed(
@@ -67,7 +68,8 @@ jboolean isXposedMaps() {
     while ((maps_tmp = pmparser_next(maps)) != nullptr) {
         LOGD("%s", maps_tmp->pathname);
         if (strstr(maps_tmp->pathname, "libmemtrack_real.so") ||
-            strstr(maps_tmp->pathname, "XposedBridge")) {
+            strstr(maps_tmp->pathname, "XposedBridge") ||
+            strstr(maps_tmp->pathname, "riru")) {
             res = JNI_TRUE;
         }
     }
